@@ -14,9 +14,7 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.google.android.exoplayer2.demo"
-    android:versionCode="2300"
-    android:versionName="2.3.0">
+    package="com.google.android.exoplayer2.demo">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -27,29 +25,29 @@
     <uses-feature
         android:name="android.hardware.touchscreen"
         android:required="false" />
-
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="24" />
+    <!--
+        <uses-sdk
+            android:minSdkVersion="16"
+            android:targetSdkVersion="24" />-->
 
     <application
         android:name="mylibrary.DemoApplication"
         android:allowBackup="false"
         android:banner="@drawable/ic_banner"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/application_name"
+        android:label="Something is good"
         android:largeHeap="true">
 
         <activity
             android:name="mylibrary.SampleChooserActivity"
             android:configChanges="keyboardHidden"
             android:label="@string/application_name">
-            <intent-filter>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -85,6 +83,18 @@
             <intent-filter>
                 <action android:name="com.google.android.exoplayer.demo.action.VIEW_LIST" />
                 <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.media.full.mediaplayer.MainActivity"
+            android:configChanges="keyboardHidden"
+            android:label="@string/application_name"
+            android:theme="@style/Theme.AppCompat.Light">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 

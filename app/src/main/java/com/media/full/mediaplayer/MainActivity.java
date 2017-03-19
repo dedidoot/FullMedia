@@ -1,39 +1,25 @@
 package com.media.full.mediaplayer;
 
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.demo.R;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 
 public class MainActivity extends AppCompatActivity {
 
     private TextView mTextMessage;
-    private SimpleExoPlayerView playerView;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -61,57 +47,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        playerView = (SimpleExoPlayerView) findViewById(R.id.player);
-        mTextMessage = (TextView) findViewById(R.id.message);
-        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-        // 1. Create a default TrackSelector
-        Handler mainHandler = new Handler();
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelection.Factory videoTrackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector trackSelector =
-                new DefaultTrackSelector(videoTrackSelectionFactory);
-
-        // 2. Create a default LoadControl
-        LoadControl loadControl = new DefaultLoadControl();
-
-        // 3. Create the player
-        final SimpleExoPlayer player =
-                ExoPlayerFactory.newSimpleInstance(getApplicationContext(), trackSelector, loadControl);
-
-        playerView.setPlayer(player);
-
-
-        // Measures bandwidth during playback. Can be null if not required.
-        DefaultBandwidthMeter bandwidthMeterX = new DefaultBandwidthMeter();
-
-        // Produces DataSource instances through which media data is loaded.
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "com.media.full.mediaplayer"), bandwidthMeterX);
-
-        // Produces Extractor instances for parsing the media data.
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        /**
+         * TEST Video BROH
+         * */
+        Uri uri = Uri.parse("https://github.com/dedy99/FullMedia/blob/mastermu/KOES%20PLUS%20Bujangan.mp4?raw=true");
 
         String path = Environment.getExternalStorageDirectory().getPath();
-        String myJpgPath = path + "/Download/sunsetanarki.mp4";
+        String pathMp4 = path + "/Download/sunsetanarki.mp4";
 
-        Uri myUri = Uri.parse(myJpgPath);//http://stackoverflow.com/questions/2709087/turning-a-string-into-a-uri-android
+        VideoView videoView = (VideoView) findViewById(R.id.videoView);
+        videoView.setVideoURI(uri); // jika url dari online / web services
+        //videoView.setVideoPath(pathMp4);// jika url dari local device
 
-        // This is the MediaSource representing the media to be played.
-        MediaSource videoSource = new ExtractorMediaSource(myUri,
-                dataSourceFactory, extractorsFactory, null, null);
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(videoView);
 
-        // Prepare the player with the source.
-        player.prepare(videoSource);
+        videoView.setMediaController(mediaController);
+        videoView.start();
 
-        mainHandler.post(new Runnable() {
+        /**
+         * TEST MP3 BROH
+         * */
+        String pathMp3 = path + "/Download/sampah.mp3";
+        Uri uriMp3LocaLDevice = Uri.parse(pathMp3);
+        Uri uriMp3Online = Uri.parse("https://raw.githubusercontent.com/dedy99/FullMedia/mastermu/Jamrud-surti%20tejo%20(www.savelagu.eu).mp3");
+        final MediaPlayer mediaPlayer = MediaPlayer.create(this, uriMp3Online);
+        Button btnPlay = (Button) findViewById(R.id.btnPlay);
+        btnPlay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                player.release();
+            public void onClick(View view) {
+                mediaPlayer.start();
             }
         });
+        Button btnPause = (Button) findViewById(R.id.btnPause);
+        btnPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mediaPlayer.pause();
+            }
+        });
+
+
     }
 
 }
